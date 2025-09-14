@@ -1,0 +1,1 @@
+temporary file to allow folder deletion
