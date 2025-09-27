@@ -71,3 +71,5 @@ export default defineConfig([
   },
 ])
 ```
+## Security
+See [SECURITY.md](./SECURITY.md) and [Responsible Disclosure](./RESPONSIBLE_DISCLOSURE.md).
