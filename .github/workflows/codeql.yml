@@ -6,31 +6,30 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: "0 6 * * 1"
-
-permissions:
-  contents: read
-  security-events: write
+    - cron: "0 13 * * 1" # Mondays 09:00 ET (13:00 UTC)
 
 jobs:
   analyze:
-    name: Analyze (javascript-typescript)
+    name: Analyze
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ "javascript-typescript" ]  # covers JS/TS/Vite
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
         with:
-          node-version: "20"
+          languages: ${{ matrix.language }}
 
-      - uses: github/codeql-action/init@v3
-        with:
-          languages: javascript-typescript
-          build-mode: none
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
 
-      - uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:javascript-typescript"
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
