@@ -1,4 +1,4 @@
-name: CodeQL
+name: "CodeQL"
 
 on:
   push:
@@ -6,30 +6,39 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: "0 13 * * 1" # Mondays 09:00 ET (13:00 UTC)
+    - cron: "0 6 * * 1"
 
 jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
-      security-events: write
+      actions: read
+      security-events: write   # REQUIRED to upload SARIF
+
     strategy:
       fail-fast: false
       matrix:
-        language: [ "javascript-typescript" ]  # covers JS/TS/Vite
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        language: [ 'javascript-typescript' ]  # more reliable id
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+    steps:
+      - uses: actions/checkout@v4
+
+      # OPTIONAL but helps when repos include tooling that needs Node
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
+      - uses: github/codeql-action/autobuild@v3
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+      # If autobuild is not needed, you can remove it or keep it; harmless for JS.
+
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
