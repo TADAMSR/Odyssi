@@ -1,0 +1,6 @@
+Contact: mailto:odyssi.app@proton.me
+Policy: https://odyssi.tech/SECURITY
+Preferred-Languages: en
+Encryption: openpgp4fpr:0000000000000000000000000000000000000000
+Canonical: https://odyssi.tech/.well-known/security.txt
+Expires: 2026-12-31T23:59:59Z
