@@ -1,0 +1,19 @@
+name: "Odyssi CodeQL config"
+paths:
+  - src
+  - .github   # so Actions code (if any) is scanned
+paths-ignore:
+  - node_modules/**
+  - dist/**
+  - build/**
+  - coverage/**
+  - .next/**
+  - out/**
+  - cypress/**
+  - **/*.test.*        # ignore tests to reduce noise
+  - **/__tests__/**
+
+# You can also add custom packs later:
+# packs:
+#   javascript:
+#     - githubsecuritylab/codeql-javascript-queries
