@@ -1,4 +1,4 @@
-name: CodeQL
+name: "CodeQL Advanced"
 
 on:
   push:
@@ -6,30 +6,61 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: "0 13 * * 1" # Mondays 09:00 ET (13:00 UTC)
+    - cron: '30 4 * * 5'   # Fri 04:30 UTC weekly
 
 jobs:
   analyze:
-    name: Analyze
-    runs-on: ubuntu-latest
+    name: Analyze (${{ matrix.language }})
+    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+
     permissions:
-      contents: read
-      security-events: write
+      security-events: write   # upload SARIF
+      contents: read           # read the repo
+      actions: read            # needed for private repos
+      packages: read           # needed if using private packs
+
     strategy:
       fail-fast: false
       matrix:
-        language: [ "javascript-typescript" ]  # covers JS/TS/Vite
+        include:
+          # Keep Actions if you store any composite or JS actions in .github/
+          - language: actions
+            build-mode: none
+          # Main app: JS/TS. Vite/React doesn’t require a build for CodeQL.
+          - language: javascript-typescript
+            build-mode: none
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # better blame/taint tracking across history
+
+      # OPTIONAL: If your project relies heavily on type info, uncomment to install deps.
+      # - name: Use Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
+      #     cache: 'npm'
+      # - run: npm ci
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          config-file: ./.github/codeql-config.yml
+          # Use the stronger, broader packs.
+          queries: +security-extended,security-and-quality
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
+      # If you ever flip a compiled language to manual build, add commands here.
+      - if: matrix.build-mode == 'manual'
+        shell: bash
+        run: |
+          echo "Add your build steps here if you set build-mode: manual"
+          exit 1
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
