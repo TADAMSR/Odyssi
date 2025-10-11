@@ -3,70 +3,90 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Odyssi — Offline-First Map, Journal & Memory Keeper</title>
-<meta name="description" content="Capture routes, notes, and photos anywhere — even offline. Local-first privacy with optional sync on your terms." />
-<!-- Favicon (inline) -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3ClinearGradient id='m' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2322D3EE'/%3E%3Cstop offset='1' stop-color='%2360A5FA'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='3' y='3' width='42' height='42' rx='12' fill='%2308132B' stroke='url(%23m)'/%3E%3Cpath d='M12 26c4-3.4 8.2-3 13.9-7.2-1.4 5.8-2.8 8.8-6 11.6-2.4 2.2-5.4 3.6-7.9 4.2' fill='url(%23m)'/%3E%3C/svg%3E">
+<title>Odyssi — Your Expedition’s Memory Engine</title>
+<meta name="description" content="Trace routes, drop memory pins, and journal trips offline. Odyssi is your expedition’s memory engine — local-first, optional sync." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2322D3EE'/%3E%3Cstop offset='1' stop-color='%2360A5FA'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='28' fill='%2306132C' stroke='url(%23g)'/%3E%3Cpath d='M17 40c12-7 17-5 25-16-2 11-4 15-10 20-4 4-9 6-13 7' fill='url(%23g)'/%3E%3C/svg%3E">
 <style>
 :root{
-  --bg:#071428; --ink:#eaf3ff; --muted:#a9c0e4; --card:rgba(255,255,255,.08); --stroke:rgba(255,255,255,.16);
-  --p1:#22d3ee; --p2:#60a5fa; --p3:#7dd3fc; --mapdark:#0b1f3a;
+  --bg:#06132C; --ink:#EAF3FF; --muted:#A9C0E4; --stroke:#193055; --glass:rgba(255,255,255,.08);
+  --c1:#22D3EE; --c2:#60A5FA; --shadow:#00000080;
 }
 *{box-sizing:border-box} html,body{height:100%}
-body{
-  margin:0; color:var(--ink);
-  font-family: ui-sans-serif, system-ui, -apple-system, Inter, Segoe UI, Roboto, Arial;
-  background: radial-gradient(1200px 800px at 90% -10%, #38bdf81a, transparent), linear-gradient(#0a1530, #09172f 60%, #08142a);
-  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow-x:hidden;
-}
-.container{max-width:1160px; margin:0 auto; padding:0 22px}
-header{position:sticky; top:0; z-index:30; backdrop-filter:saturate(160%) blur(10px); background:linear-gradient(180deg,rgba(7,17,40,.7),rgba(7,17,40,.35)); border-bottom:1px solid var(--stroke)}
-.nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
-.brand{display:flex; gap:10px; align-items:center}
-.brand svg{height:26px}
-.btn{display:inline-flex; gap:10px; align-items:center; padding:11px 16px; border-radius:14px; font-weight:800; background:#fff; color:#091220; box-shadow:0 10px 30px #00000044}
-.btn.ghost{background:transparent; color:var(--ink); border:1px solid var(--stroke)}
-.hero{padding:76px 0 26px}
-.grid{display:grid; gap:26px} @media(min-width:980px){ .grid{grid-template-columns:1.1fr .9fr} }
-h1{margin:8px 0 6px; font-size:48px; line-height:1.06; letter-spacing:-.02em;
-  background:linear-gradient(90deg,#eaf3ff, #cfe7ff 40%, #eaf3ff); -webkit-background-clip:text; background-clip:text; color:transparent}
-.lead{color:var(--muted); line-height:1.6; max-width:720px}
-.badges{display:flex; gap:10px; flex-wrap:wrap; margin:16px 0}
-.pill{font-size:12px; padding:6px 10px; border-radius:9999px; border:1px solid var(--stroke); background:rgba(255,255,255,.06)}
-.panel{border:1px solid var(--stroke); background:var(--card); border-radius:22px; padding:14px; box-shadow:0 10px 30px #00000040}
-.section{padding:30px 0}
-.cards{display:grid; gap:14px} @media(min-width:900px){ .cards{grid-template-columns:repeat(3,1fr)} }
-.card{border:1px solid var(--stroke); background:var(--card); border-radius:16px; padding:14px; transition:transform .2s ease}
-.card:hover{transform:translateY(-2px)}
-.muted{color:var(--muted)}
-/* Map mock */
-.mapwrap{position:relative; border-radius:16px; overflow:hidden; border:1px solid var(--stroke); background:var(--mapdark); height:320px}
-#map{width:100%; height:100%}
-.pin{fill:#22d3ee; stroke:#081a2f; stroke-width:2}
-.route{stroke:url(#routeGrad); stroke-width:6; fill:none; filter:drop-shadow(0 4px 10px #22d3ee40)}
-.toolbox{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
-.tool{font-size:12px; padding:6px 10px; border:1px solid var(--stroke); border-radius:10px; cursor:pointer; background:rgba(255,255,255,.06)}
-.log{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:rgba(8,20,43,.4); border:1px dashed var(--stroke); border-radius:12px; padding:8px; color:#cfe0ff; height:80px; overflow:auto}
-footer{border-top:1px solid var(--stroke); margin-top:36px}
-.foot{padding:16px 0; display:flex; justify-content:space-between; gap:12px; color:#9fb6d9}
+body{margin:0;color:var(--ink);background:#020814;font-family:ui-sans-serif,system-ui,-apple-system,Inter,Segoe UI,Roboto,Arial;overflow-x:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:inherit;text-decoration:none}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#051029ee,#05102988);backdrop-filter:blur(10px);border-bottom:1px solid var(--stroke)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.brand{display:flex;gap:12px;align-items:center}
+.brand svg{height:30px}
+.btn{display:inline-flex;gap:10px;align-items:center;padding:11px 16px;border-radius:14px;font-weight:800;background:#fff;color:#06132C;box-shadow:0 10px 30px var(--shadow);transition:transform .2s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--stroke)}
+.hero{padding:72px 0 26px}
+.grid{display:grid;gap:26px}
+@media(min-width:980px){.grid{grid-template-columns:1.1fr .9fr}}
+h1{margin:6px 0 10px;font-size:50px;line-height:1.04;letter-spacing:-.02em;background:linear-gradient(90deg,#EAF3FF,#CFE7FF 40%,#EAF3FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);max-width:760px;line-height:1.6}
+.pills{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.pill{padding:6px 10px;border-radius:9999px;border:1px solid var(--stroke);background:rgba(255,255,255,.06);font-size:12px}
+.panel{border:1px solid var(--stroke);background:var(--glass);border-radius:20px;padding:14px;box-shadow:0 12px 40px var(--shadow)}
+/* Sky & stars */
+.sky{position:relative;height:380px;border-radius:18px;overflow:hidden;border:1px solid var(--stroke);background:radial-gradient(1200px 800px at 80% -10%,#1e3a8a33,transparent),linear-gradient(#071b38,#051029)}
+#stars, #dust{position:absolute;inset:0}
+.scene{position:absolute;inset:0;pointer-events:none}
+.layer{position:absolute;inset:0;background-repeat:no-repeat;background-size:cover;will-change:transform}
+.mtn-a{background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="600"><path d="M0 520 L200 460 380 520 560 460 760 520 980 460 1200 520 1400 460 1600 520 1600 600 0 600Z" fill="%230f2653"/></svg>')}
+.mtn-b{background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="600"><path d="M0 480 L180 420 300 470 420 410 550 450 680 390 820 440 980 380 1120 410 1300 360 1600 400 1600 600 0 600Z" fill="%2313316b"/></svg>')}
+.mtn-c{background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="600"><path d="M0 560 L160 540 340 560 520 540 720 560 940 540 1160 560 1360 540 1600 560 1600 600 0 600Z" fill="%231a3a7f"/></svg>')}
+/* Map overlay */
+.map{position:absolute;inset:0}
+.route{stroke:url(#rg);stroke-width:6;fill:none;stroke-linecap:round;filter:drop-shadow(0 6px 16px #22d3ee45)}
+.pin{fill:var(--c1);stroke:#08223f;stroke-width:2;cursor:pointer}
+/* Compass */
+.compass{position:absolute;right:12px;bottom:12px;width:110px;height:110px;border-radius:16px;background:#041226aa;border:1px solid var(--stroke);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center}
+/* Journal drawer */
+.journal{position:fixed;right:24px;top:86px;width:340px;max-width:calc(100% - 48px);background:#06122a;border:1px solid var(--stroke);border-radius:18px;box-shadow:0 18px 48px var(--shadow);transform:translateX(120%);transition:transform .3s ease}
+.journal.open{transform:translateX(0)}
+.j-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--stroke)}
+.j-body{padding:12px;display:grid;gap:8px}
+.input, textarea{width:100%;padding:10px;border-radius:10px;border:1px solid var(--stroke);background:rgba(255,255,255,.06);color:var(--ink)}
+footer{border-top:1px solid var(--stroke);margin-top:36px}
+.foot{padding:16px 0;display:flex;justify-content:space-between;color:#9fb6d9}
+.switch{display:inline-flex;align-items:center;gap:8px}
+.switch input{appearance:none;width:44px;height:24px;border-radius:999px;background:#0d223f;border:1px solid var(--stroke);position:relative;outline:none;cursor:pointer}
+.switch input:before{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#EAF3FF;transition:.2s}
+.switch input:checked{background:#103a6e}
+.switch input:checked:before{transform:translateX(20px);background:#ffd34d}
 .tiny{font-size:12px}
+@media (prefers-reduced-motion: reduce){
+  .layer{transition:none;transform:none!important}
+}
 </style>
 </head>
 <body>
 <header>
   <div class="container nav">
-    <div class="brand">
-      <!-- Inline wordmark -->
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 28" fill="none" aria-label="Odyssi logo">
-        <defs><linearGradient id="odyG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#60A5FA"/></linearGradient></defs>
-        <rect x="0.5" y="2.5" width="23" height="23" rx="6" stroke="url(#odyG)" fill="url(#odyG)" opacity=".15"/>
-        <path d="M7 14.5c2.8-2.4 5.8-2.2 9.8-5.2-1 4.2-2 6.3-4.2 8.3-1.7 1.6-3.8 2.6-5.6 3" fill="url(#odyG)" opacity=".8"/>
-        <text x="30" y="19" font-family="Inter, system-ui, -apple-system" font-size="18" font-weight="800" fill="#EAF3FF">Odyssi</text>
+    <div class="brand" aria-label="Odyssi">
+      <!-- ROUTE GLYPH WORDMARK (animated path “O” → arrow) -->
+      <svg viewBox="0 0 340 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="false">
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#60A5FA"/></linearGradient>
+        </defs>
+        <!-- Glyph -->
+        <g transform="translate(0,2)">
+          <circle cx="18" cy="18" r="16" fill="none" stroke="url(#lg)" stroke-width="2" opacity=".8"/>
+          <path id="glyph" d="M8 26c9-6 13-5 19-14-1 9-2 13-6 17-3 3-7 5-10 6" fill="url(#lg)"/>
+        </g>
+        <!-- Word -->
+        <text x="46" y="26" fill="#EAF3FF" font-size="22" font-weight="800" font-family="Inter, system-ui">Odyssi</text>
+        <style>
+          #glyph{stroke:none}
+        </style>
       </svg>
     </div>
-    <nav style="display:flex; gap:16px; align-items:center">
-      <a class="tiny" href="#features">Features</a>
-      <a class="tiny" href="#how">How it works</a>
+    <nav style="display:flex;gap:14px;align-items:center">
+      <label class="switch tiny" aria-label="Night mode"><input id="mode" type="checkbox"><span>Night</span></label>
+      <a class="btn ghost" id="openJ">Journal</a>
       <a class="btn" href="https://Odyssi.tech">Open App</a>
     </nav>
   </div>
@@ -74,139 +94,171 @@ footer{border-top:1px solid var(--stroke); margin-top:36px}
 
 <main class="container hero grid">
   <section>
-    <span class="pill">Built for the trail — and the trip</span>
-    <h1>Offline-First Map, Journal & Memory Keeper</h1>
-    <p class="lead">Capture routes, notes, and photos anywhere — even with no signal. Odyssi keeps your data on-device by default and syncs only when you say so.</p>
-    <div class="badges">
-      <span class="pill">Works offline</span>
-      <span class="pill">Local-first privacy</span>
-      <span class="pill">Mobile-ready</span>
-    </div>
-    <div class="toolbox">
-      <button class="tool" id="drop-pin">Drop Pin</button>
-      <button class="tool" id="clear-pins">Clear Pins</button>
-      <button class="tool" id="trace-route">Trace Demo Route</button>
+    <h1>Your expedition’s memory engine.</h1>
+    <p class="lead">Trace routes, drop memory pins, and write the story. Works offline by default; you decide when to sync.</p>
+    <div class="pills"><span class="pill">Offline-first</span><span class="pill">Memory Pins</span><span class="pill">Encrypted backups (optional)</span></div>
+    <div class="pills">
+      <a class="btn" id="trace">Trace demo trail</a>
+      <a class="btn ghost" id="drop">Drop pin</a>
+      <a class="btn ghost" id="clearPins">Clear pins</a>
     </div>
   </section>
 
   <aside class="panel">
-    <div class="mapwrap">
-      <!-- Interactive SVG map -->
-      <svg id="map" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" aria-label="Odyssi demo map">
-        <defs>
-          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#0f2a55"/><stop offset="1" stop-color="#0b1f3a"/>
-          </linearGradient>
-          <linearGradient id="routeGrad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#60a5fa"/>
-          </linearGradient>
-          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2a3e62" stroke-width="1" opacity=".35"/>
-          </pattern>
-        </defs>
-        <rect width="900" height="560" fill="url(#sky)"/>
-        <rect width="900" height="560" fill="url(#grid)"/>
-        <!-- Route path placeholder -->
-        <path id="route" class="route" d="M100,420 C 260,300 480,360 800,180" stroke-linecap="round" stroke-dasharray="0 9999"/>
-        <!-- Pin layer -->
+    <div class="sky" id="sky">
+      <canvas id="stars" aria-hidden="true"></canvas>
+      <canvas id="dust" aria-hidden="true"></canvas>
+
+      <div class="scene" id="scene">
+        <div class="layer mtn-a" data-depth=".12"></div>
+        <div class="layer mtn-b" data-depth=".2"></div>
+        <div class="layer mtn-c" data-depth=".33"></div>
+      </div>
+
+      <!-- Map overlay -->
+      <svg class="map" viewBox="0 0 1200 760" id="map" role="img" aria-label="Odyssi demo map">
+        <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#60A5FA"/></linearGradient></defs>
         <g id="pins"></g>
+        <path id="trail" class="route" d="M120 540 C 280 420 500 470 820 300 S 1080 240 1140 260" stroke-dasharray="0 9999"/>
       </svg>
+
+      <!-- Compass -->
+      <div class="compass" aria-hidden="true">
+        <svg viewBox="0 0 120 120" id="compass">
+          <circle cx="60" cy="60" r="52" fill="#06142c" stroke="#1b2a47"/>
+          <g id="needle" transform="rotate(0 60 60)">
+            <path d="M60 16 L68 60 L60 68 L52 60 Z" fill="#ffd34d"/>
+            <path d="M60 104 L68 60 L60 52 L52 60 Z" fill="#22d3ee"/>
+          </g>
+          <text x="58" y="18" fill="#88a7ff" font-size="10">N</text>
+          <text x="104" y="64" fill="#88a7ff" font-size="10">E</text>
+          <text x="58" y="112" fill="#88a7ff" font-size="10">S</text>
+          <text x="10" y="64" fill="#88a7ff" font-size="10">W</text>
+        </svg>
+      </div>
     </div>
-    <div style="margin-top:10px" class="log" id="log">Tips: Click “Trace Demo Route” then click the map to drop memory pins. Everything is local.</div>
   </aside>
 </main>
 
-<section id="features" class="container section">
-  <h2 style="margin:0 0 10px; font-size:22px">Explorer-ready features</h2>
-  <p class="muted" style="margin:0 0 10px; max-width:720px">Track your path, capture thoughts, and keep ownership of your data.</p>
-  <div class="cards">
-    <div class="card"><h3>Offline maps</h3><p class="muted">Cache tiles locally and navigate when the signal disappears.</p></div>
-    <div class="card"><h3>Fast journaling</h3><p class="muted">Pin a location, jot a note, attach a photo — on-device first.</p></div>
-    <div class="card"><h3>Private by design</h3><p class="muted">No trackers, no ads. Optional encrypted backups on your terms.</p></div>
+<!-- Journal -->
+<aside class="journal" id="journal" aria-label="Trail journal">
+  <div class="j-head"><strong>Trail Journal</strong><button class="btn ghost" id="closeJ">Close</button></div>
+  <div class="j-body">
+    <input class="input" id="title" placeholder="Entry title"/>
+    <textarea rows="5" id="note" placeholder="What happened here?" class="input"></textarea>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" id="save">Save Entry</button>
+      <button class="btn ghost" id="wipe">Clear Entries</button>
+    </div>
+    <div id="entries" class="muted" style="font-size:14px"></div>
   </div>
-</section>
-
-<section id="how" class="container section">
-  <h2 style="margin:0 0 10px; font-size:22px">How it works</h2>
-  <div class="cards" style="grid-template-columns:repeat(3,1fr)">
-    <div class="card"><div class="tiny">1. Capture</div><p class="muted">Pins, notes & photos — saved locally first.</p></div>
-    <div class="card"><div class="tiny">2. Explore</div><p class="muted">Navigate offline with cached tiles and GPS.</p></div>
-    <div class="card"><div class="tiny">3. Sync (optional)</div><p class="muted">Choose what to back up when you’re online.</p></div>
-  </div>
-</section>
+</aside>
 
 <footer>
   <div class="container foot">
-    <div>© <span id="y"></span> Odyssi</div>
-    <div style="display:flex; gap:12px">
-      <a class="tiny" href="/security.txt">security.txt</a>
-      <a class="tiny" href="/terms">Terms</a>
-      <a class="tiny" href="/privacy">Privacy</a>
-    </div>
+    <div>© <span id="year"></span> Odyssi</div>
+    <div style="display:flex;gap:12px"><span class="pill">Local-first</span><span class="pill">No trackers</span></div>
   </div>
 </footer>
 
 <script>
-document.getElementById("y").textContent = new Date().getFullYear();
+/* Year */
+year.textContent = new Date().getFullYear();
 
-const map = document.getElementById('map');
-const pinsGroup = document.getElementById('pins');
-const logEl = document.getElementById('log');
-const route = document.getElementById('route');
-let dropMode = false;
-
-// Buttons
-document.getElementById('drop-pin').onclick = () => { dropMode = true; log('Drop mode: click on the map to add a memory pin.'); };
-document.getElementById('clear-pins').onclick = () => { pinsGroup.innerHTML=''; localStorage.removeItem('odyssiPins'); log('Cleared pins.'); };
-document.getElementById('trace-route').onclick = animateRoute;
-
-// Click to drop pins
-map.addEventListener('click', (e) => {
-  if (!dropMode) return;
-  const pt = map.createSVGPoint();
-  pt.x = e.clientX; pt.y = e.clientY;
-  const svgP = pt.matrixTransform(map.getScreenCTM().inverse());
-  const pin = document.createElementNS('http://www.w3.org/2000/svg','circle');
-  pin.setAttribute('cx', svgP.x);
-  pin.setAttribute('cy', svgP.y);
-  pin.setAttribute('r', 7);
-  pin.setAttribute('class','pin');
-  pinsGroup.appendChild(pin);
-  persistPins();
-  log(`Pin @ ${svgP.x.toFixed(0)},${svgP.y.toFixed(0)} (local only)`);
+/* Night mode toggle */
+mode.addEventListener('change',()=>{
+  document.body.style.background = mode.checked
+    ? 'radial-gradient(1200px 800px at 80% -10%,#1e3a8a44,transparent), #01060f'
+    : '#020814';
 });
 
-// Persist pins locally
-function persistPins(){
-  const arr = [...pinsGroup.querySelectorAll('circle')].map(c=>({x:c.cx.baseVal.value, y:c.cy.baseVal.value}));
-  localStorage.setItem('odyssiPins', JSON.stringify(arr));
-}
-function restorePins(){
-  const data = localStorage.getItem('odyssiPins');
-  if(!data) return;
-  JSON.parse(data).forEach(p => {
-    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    c.setAttribute('cx', p.x); c.setAttribute('cy', p.y); c.setAttribute('r', 7); c.setAttribute('class','pin');
-    pinsGroup.appendChild(c);
+/* Starfield + dust */
+(function stars(){
+  const s = document.getElementById('stars'), d = document.getElementById('dust');
+  const sc = s.getContext('2d'), dc = d.getContext('2d');
+  function size(){ s.width = s.clientWidth; s.height = s.clientHeight; d.width = d.clientWidth; d.height = d.clientHeight; }
+  window.addEventListener('resize', size); size();
+  const pts = Array.from({length: 160}, ()=>({x:Math.random(), y:Math.random(), z:Math.random()}));
+  let t=0;
+  function loop(){
+    t+=0.002; sc.clearRect(0,0,s.width,s.height); dc.clearRect(0,0,d.width,d.height);
+    pts.forEach(p=>{
+      const x = p.x * s.width, y = p.y * s.height;
+      const tw = (Math.sin(t*20 + p.z*10)+1)/2 * 0.6 + 0.2;
+      sc.fillStyle = `rgba(224,240,255,${tw})`; sc.fillRect(x,y,1.2,1.2);
+    });
+    for(let i=0;i<60;i++){
+      const x=Math.random()*d.width, y=Math.random()*d.height;
+      dc.fillStyle = 'rgba(96,165,250,0.02)'; dc.fillRect(x,y,2,2);
+    }
+    requestAnimationFrame(loop);
+  } loop();
+})();
+
+/* Parallax & compass */
+const sky = document.getElementById('sky');
+sky.addEventListener('mousemove', (e)=>{
+  const r = sky.getBoundingClientRect(); const cx = (e.clientX - r.left)/r.width - .5; const cy = (e.clientY - r.top)/r.height - .5;
+  document.querySelectorAll('.layer').forEach(el=>{
+    const d = parseFloat(el.dataset.depth||0);
+    el.style.transform = `translate(${cx * -25 * d}px, ${cy * -18 * d}px)`;
   });
-}
-restorePins();
+  const dx = (e.clientX - (r.left + r.width/2));
+  const dy = (e.clientY - (r.top + r.height/2));
+  const ang = Math.atan2(dy, dx) * 180/Math.PI + 90;
+  needle.setAttribute('transform',`rotate(${ang} 60 60)`);
+});
 
-// Route animation
-function animateRoute(){
-  const len = route.getTotalLength();
-  route.style.strokeDasharray = `${len} ${len}`;
-  route.style.strokeDashoffset = len;
-  route.getBoundingClientRect(); // force layout
-  route.style.transition = 'stroke-dashoffset 1800ms ease-out';
-  route.style.strokeDashoffset = '0';
-  log('Tracing demo route…');
-}
+/* Trail animation */
+trace.onclick = ()=>{
+  const path = document.getElementById('trail');
+  const L = path.getTotalLength();
+  path.style.transition = 'none';
+  path.style.strokeDasharray = `${L} ${L}`;
+  path.style.strokeDashoffset = L;
+  void path.getBoundingClientRect();
+  path.style.transition = 'stroke-dashoffset 1800ms ease-out';
+  path.style.strokeDashoffset = '0';
+};
 
-function log(msg){
-  const t = new Date().toLocaleTimeString();
-  logEl.textContent = `[${t}] ${msg}\n` + logEl.textContent;
+/* Pins */
+const pins = document.getElementById('pins'); let pinMode=false;
+drop.onclick = ()=>{ pinMode = true; drop.textContent='Click map to pin…'; };
+clearPins.onclick = ()=>{ pins.innerHTML=''; localStorage.removeItem('odyssi_pins'); };
+map.addEventListener('click', (e)=>{
+  if(!pinMode) return; pinMode=false; drop.textContent='Drop pin';
+  const pt = map.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+  const p = pt.matrixTransform(map.getScreenCTM().inverse());
+  addPin(p.x,p.y,true);
+});
+function addPin(x,y,save){
+  const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  c.setAttribute('cx',x); c.setAttribute('cy',y); c.setAttribute('r',8); c.setAttribute('class','pin');
+  c.addEventListener('click',()=>{ openJ(); title.value = 'Memory @ '+x.toFixed(0)+','+y.toFixed(0); });
+  pins.appendChild(c); if(save) persistPins();
 }
+function persistPins(){
+  const list=[...pins.querySelectorAll('circle')].map(n=>({x:n.cx.baseVal.value,y:n.cy.baseVal.value}));
+  localStorage.setItem('odyssi_pins',JSON.stringify(list));
+}
+(function restorePins(){ try{ (JSON.parse(localStorage.getItem('odyssi_pins'))||[]).forEach(p=>addPin(p.x,p.y,false)); }catch{} })();
+
+/* Journal */
+const journal = document.getElementById('journal');
+const openJ = ()=> journal.classList.add('open');
+const closeDrawer = ()=> journal.classList.remove('open');
+openJBtn = document.getElementById('openJ'); openJBtn.onclick = openJ; closeJ.onclick = closeDrawer;
+save.onclick = ()=>{
+  const E = JSON.parse(localStorage.getItem('odyssi_entries')||'[]');
+  E.unshift({t:new Date().toLocaleString(), title:title.value||'Untitled', note:note.value||''});
+  localStorage.setItem('odyssi_entries',JSON.stringify(E)); title.value=''; note.value=''; renderEntries();
+};
+wipe.onclick = ()=>{ localStorage.removeItem('odyssi_entries'); renderEntries(); };
+function renderEntries(){
+  const E = JSON.parse(localStorage.getItem('odyssi_entries')||'[]');
+  entries.innerHTML = E.length? E.map(e=>`<div style="border:1px solid var(--stroke);border-radius:12px;padding:10px;margin-bottom:8px"><div style="font-weight:700">${e.title}</div><div class="tiny" style="opacity:.7">${e.t}</div><div style="margin-top:6px">${e.note}</div></div>`).join('') : '<span class="muted">No entries yet.</span>';
+}
+renderEntries();
 </script>
 </body>
 </html>
