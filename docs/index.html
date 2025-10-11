@@ -6,50 +6,63 @@
 <title>Odyssi — Explore offline</title>
 <meta name="description" content="Odyssi: offline-first journaling with waypoints, notes, and media.">
 <style>
-  :root{--bg:#000;--fg:#fff;--sub:#a7f3d0;--accent:#10b981;--glass:rgba(255,255,255,.06);--ring:rgba(255,255,255,.12)}
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;background:#000;color:#fff}
-  a{color:inherit}
+  :root{--ring:rgba(255,255,255,.12);--glass:rgba(255,255,255,.06);--emerald:#34d399}
+  *{box-sizing:border-box} html,body{height:100%}
+  body{margin:0;background:#000;color:#fff;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
   .container{max-width:1120px;margin:0 auto;padding:0 24px}
   .btn{background:#1f2937;color:#fff;border:1px solid var(--ring);padding:10px 14px;border-radius:14px;cursor:pointer}
   .btn.secondary{background:transparent}
   header.sticky{position:sticky;top:0;backdrop-filter:blur(10px);background:rgba(0,0,0,.6);border-bottom:1px solid var(--ring);z-index:30}
+  .badge{display:inline-flex;align-items:center;gap:8px;background:var(--glass);border:1px solid var(--ring);padding:6px 10px;border-radius:999px;color:#d1fae5;margin:12px 0}
   .hero{position:relative;overflow:hidden}
   .row{display:grid;grid-template-columns:1fr;gap:24px}
   @media(min-width:992px){.row{grid-template-columns:1.1fr .9fr}}
-  .badge{display:inline-flex;align-items:center;gap:8px;background:var(--glass);border:1px solid var(--ring);padding:6px 10px;border-radius:999px;color:#d1fae5}
   .card{background:var(--glass);border:1px solid var(--ring);border-radius:22px;overflow:hidden}
   .card-header{padding:18px 20px;border-bottom:1px solid var(--ring)}
   .card-body{padding:18px 20px}
   .grid{display:grid;gap:18px}
   @media(min-width:768px){.grid.cols-3{grid-template-columns:repeat(3,1fr)}}
-  .muted{color:rgba(255,255,255,.75)}
-  .hint{color:rgba(255,255,255,.6);font-size:12px}
+  .muted{color:rgba(255,255,255,.75)} .hint{color:rgba(255,255,255,.6);font-size:12px}
   .cta{border:1px solid var(--ring);background:rgba(255,255,255,.04);border-radius:26px;padding:24px}
   .footer-note{color:rgba(255,255,255,.5);font-size:12px;margin-top:14px}
-  /* map */
-  .map{position:relative;height:260px;border-radius:16px;overflow:hidden;cursor:crosshair;background-image:radial-gradient(transparent 0 2px, rgba(255,255,255,.06) 2px),linear-gradient(135deg, rgba(16,185,129,.18), transparent);background-size:24px 24px, 100% 100%}
-  .pin{position:absolute;width:14px;height:14px;background:#34d399;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.5)}
-  .tooltip{position:absolute;left:18px;top:-2px;background:rgba(0,0,0,.75);padding:2px 6px;border-radius:6px;font-size:12px;opacity:0;transition:.15s}
-  .pin:hover .tooltip{opacity:1}
-  /* accordion */
-  details{background:var(--glass);border:1px solid var(--ring);border-radius:16px;padding:14px}
-  details+details{margin-top:12px}
-  summary{cursor:pointer;font-weight:600}
+  /* ambience grid background */
+  .ambience{position:absolute;inset:0;background-image:
+    radial-gradient(circle at 25% 10%, rgba(16,185,129,.12), transparent 40%),
+    radial-gradient(circle at 75% 20%, rgba(16,185,129,.08), transparent 45%),
+    linear-gradient(transparent, #000 80%);
+    pointer-events:none}
   /* particles */
   #particles{width:100%;height:420px;display:block;opacity:.8}
   .fade-bottom{position:absolute;inset:0;background:linear-gradient(to bottom, transparent, rgba(0,0,0,.6))}
   h1{font-size:clamp(32px,6vw,56px);line-height:1.05;margin:0}
+  /* map */
+  .map{position:relative;height:260px;border-radius:16px;overflow:hidden;cursor:crosshair;background-image:
+    radial-gradient(transparent 0 2px, rgba(255,255,255,.06) 2px),
+    linear-gradient(135deg, rgba(16,185,129,.18), transparent);
+    background-size:24px 24px, 100% 100%}
+  .pin{position:absolute;width:14px;height:14px;background:var(--emerald);border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.5)}
+  .tooltip{position:absolute;left:18px;top:-2px;background:rgba(0,0,0,.75);padding:2px 6px;border-radius:6px;font-size:12px;opacity:0;transition:.15s}
+  .pin:hover .tooltip{opacity:1}
+  /* marquee strip */
+  .marquee{overflow:hidden;white-space:nowrap;border-top:1px solid var(--ring);border-bottom:1px solid var(--ring);background:rgba(255,255,255,.03)}
+  .marquee .track{display:inline-block;animation:scroll 16s linear infinite;padding:10px 0}
+  .pill{display:inline-block;margin:0 10px;padding:6px 10px;border-radius:999px;background:var(--glass);border:1px solid var(--ring);font-size:14px}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+  @media(min-width:700px){.stats{grid-template-columns:repeat(4,1fr)}}
+  .stat{background:var(--glass);border:1px solid var(--ring);border-radius:16px;padding:14px;text-align:center}
+  .stat .num{font-size:22px;font-weight:700;color:#a7f3d0}
 </style>
 </head>
 <body>
 <header class="sticky">
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0">
-<div class="badge" style="gap:10px">
-  <img src="PASTE_THE_DATA_URI_HERE" alt="Odyssi logo" style="height:30px; width:auto; display:block" />
-  Odyssi • offline-first
-</div>
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between">
+    <div class="badge">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3l4 7-4 11-4-11 4-7z" stroke="#a7f3d0"/></svg>
+      Odyssi • offline-first
+    </div>
     <nav style="display:flex;gap:8px">
       <button class="btn" onclick="document.getElementById('tour').scrollIntoView({behavior:'smooth'})">Interactive tour</button>
       <button class="btn secondary" onclick="document.getElementById('faq').scrollIntoView({behavior:'smooth'})">How it works</button>
@@ -59,6 +72,7 @@
 
 <section class="hero">
   <canvas id="particles"></canvas>
+  <div class="ambience"></div>
   <div class="fade-bottom"></div>
   <div class="container" style="padding:60px 0 70px">
     <div class="row">
@@ -88,10 +102,34 @@
         </div>
       </div>
     </div>
+    <div class="stats">
+      <div class="stat"><div class="num" id="st1">0</div><div class="hint">Waypoints added</div></div>
+      <div class="stat"><div class="num" id="st2">0</div><div class="hint">Offline actions</div></div>
+      <div class="stat"><div class="num" id="st3">0</div><div class="hint">Pins moved</div></div>
+      <div class="stat"><div class="num" id="st4">0</div><div class="hint">Seconds exploring</div></div>
+    </div>
   </div>
 </section>
 
-<section class="container" style="padding:30px 0 0">
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span class="pill">Offline-first</span>
+    <span class="pill">Zero trackers</span>
+    <span class="pill">Smart waypoints</span>
+    <span class="pill">Media notes</span>
+    <span class="pill">Export GPX/JSON</span>
+    <span class="pill">Your data, your rules</span>
+    <!-- duplicate for seamless loop -->
+    <span class="pill">Offline-first</span>
+    <span class="pill">Zero trackers</span>
+    <span class="pill">Smart waypoints</span>
+    <span class="pill">Media notes</span>
+    <span class="pill">Export GPX/JSON</span>
+    <span class="pill">Your data, your rules</span>
+  </div>
+</div>
+
+<section id="features" class="container" style="padding:30px 0 0">
   <div class="grid cols-3">
     <div class="card"><div class="card-header"><strong>Offline-first</strong></div><div class="card-body muted">Capture notes and locations without a signal. Sync only when you want.</div></div>
     <div class="card"><div class="card-header"><strong>Smart Waypoints</strong></div><div class="card-body muted">Organize trips with tags, photos, and timelines that make sense.</div></div>
@@ -155,22 +193,23 @@
     requestAnimationFrame(loop);
   } loop();
 })();
-// map
-const map=document.getElementById('map');
-let pinCount=2;
+// map + counters
+const map=document.getElementById('map'); let pinCount=2, moved=0, offline=0, start=Date.now();
 function addPin(e){
   const rect=map.getBoundingClientRect();
   const x=e.clientX-rect.left, y=e.clientY-rect.top;
-  createPin(x,y,'Pin '+(++pinCount));
+  createPin(x,y,'Pin '+(++pinCount)); bump('st1'); offline++; bump('st2');
 }
 function createPin(x,y,label){
   const el=document.createElement('div'); el.className='pin'; el.style.left=(x-7)+'px'; el.style.top=(y-7)+'px';
-  el.draggable=true; el.addEventListener('dragstart',ev=>{ev.dataTransfer.setData('text/plain','');el.dataset.offsetX=(ev.offsetX);el.dataset.offsetY=(ev.offsetY);});
+  el.draggable=true; el.addEventListener('dragstart',ev=>{ev.dataTransfer.setData('text/plain',''); el.dataset.offsetX=(ev.offsetX); el.dataset.offsetY=(ev.offsetY);});
   map.addEventListener('dragover',ev=>ev.preventDefault());
-  map.addEventListener('drop',ev=>{ev.preventDefault(); const ox=+el.dataset.offsetX||7, oy=+el.dataset.offsetY||7; const r=map.getBoundingClientRect(); el.style.left=(ev.clientX-r.left-ox)+'px'; el.style.top=(ev.clientY-r.top-oy)+'px';});
+  map.addEventListener('drop',ev=>{ev.preventDefault(); const ox=+el.dataset.offsetX||7, oy=+el.dataset.offsetY||7; const r=map.getBoundingClientRect(); el.style.left=(ev.clientX-r.left-ox)+'px'; el.style.top=(ev.clientY-r.top-oy)+'px'; moved++; bump('st3');});
   const tip=document.createElement('div'); tip.className='tooltip'; tip.textContent=label; el.appendChild(tip);
   map.appendChild(el);
 }
+function bump(id){ const n=document.getElementById(id); n.textContent=+n.textContent+1; }
+// seed pins
 createPin(60,60,'First Pin'); createPin(220,120,'Photo Spot');
 // tour
 const steps=[
@@ -183,6 +222,8 @@ function renderTour(){ document.getElementById('tour-title').textContent=steps[i
 function tourNext(){ idx=(idx+1)%steps.length; renderTour(); }
 function tourPrev(){ idx=(idx-1+steps.length)%steps.length; renderTour(); }
 renderTour();
+// seconds exploring counter
+setInterval(()=>{ document.getElementById('st4').textContent=Math.floor((Date.now()-start)/1000); }, 1000);
 // year
 document.getElementById('year').textContent=new Date().getFullYear();
 </script>
