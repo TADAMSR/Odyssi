@@ -1,14 +1,137 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>odyssi</title>
-    <script type="module" crossorigin src="/assets/index-CAl1KfkQ.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-D8b4DHJx.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Odyssi — Offline-First Map, Journal & Memory Keeper</title>
+  <style>
+    :root{
+      --bg1:#0b1220; --bg2:#0e1a37; --accent:#7dd3fc; --ink:#e6eefb; --muted:#9fb3d6;
+      --card: rgba(255,255,255,0.06); --stroke: rgba(255,255,255,0.12);
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial;
+      color:var(--ink); background: radial-gradient(1200px 800px at 80% -10%, #2563eb22, transparent) ,linear-gradient(180deg,var(--bg1),var(--bg2));
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    a{color:inherit; text-decoration:none}
+    .container{max-width:1100px; margin:0 auto; padding:0 24px}
+    header{
+      position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px);
+      background:linear-gradient(180deg,rgba(6,12,24,.7),rgba(6,12,24,.35));
+      border-bottom:1px solid var(--stroke); z-index:40;
+    }
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    .brand{display:flex; gap:10px; align-items:center; font-weight:800; letter-spacing:.2px}
+    .compass{width:22px; height:22px; display:inline-block; border-radius:6px; border:1px solid var(--stroke); background:conic-gradient(from 45deg,#22d3ee55,#60a5fa55,#22d3ee55);}
+    .btn{display:inline-flex; gap:8px; align-items:center; padding:10px 16px; border-radius:14px; font-weight:700; background:#fff; color:#0b1020}
+    .btn.ghost{background:transparent; color:var(--ink); border:1px solid var(--stroke)}
+    .hero{padding:72px 0 28px}
+    .grid{display:grid; gap:28px}
+    @media(min-width:900px){ .grid{grid-template-columns:1.2fr .8fr} }
+    h1{font-size:40px; line-height:1.1; margin:14px 0 10px}
+    p.lead{color:var(--muted); line-height:1.6; max-width:680px}
+    .badges{display:flex; flex-wrap:wrap; gap:10px; margin:18px 0}
+    .pill{font-size:12px; padding:6px 10px; border:1px solid var(--stroke); border-radius:9999px; background:rgba(255,255,255,0.04)}
+    .panel{border:1px solid var(--stroke); background:var(--card); border-radius:22px; padding:16px}
+    .mapmock{height:280px; border-radius:16px; border:1px solid var(--stroke); background:
+      radial-gradient(500px 300px at 20% 10%, #38bdf833, transparent),
+      linear-gradient(135deg,#0b1220,#0f172a 40%, #0b1220)}
+    .features{padding:40px 0 20px}
+    .cards{display:grid; gap:14px}
+    @media(min-width:800px){ .cards{grid-template-columns:repeat(3,1fr)} }
+    .card{border:1px solid var(--stroke); background:var(--card); border-radius:18px; padding:16px}
+    .card h3{margin:6px 0 6px; font-size:16px}
+    .muted{color:var(--muted)}
+    .how{padding:28px 0}
+    .steps{display:grid; gap:14px}
+    @media(min-width:800px){ .steps{grid-template-columns:repeat(3,1fr)} }
+    footer{border-top:1px solid var(--stroke); margin-top:40px}
+    .foot{padding:18px 0; display:flex; gap:14px; align-items:center; justify-content:space-between; color:#a9b7d6}
+    .cta-center{display:flex; justify-content:center; padding:10px 0 24px}
+    .tiny{font-size:12px; color:#97a6c4}
+    .fade{opacity:0; transform:translateY(8px); animation:up .6s ease-out .05s forwards}
+    @keyframes up{to{opacity:1; transform:none}}
+    .icon{display:inline-block; width:18px; height:18px; border:1px solid var(--stroke); border-radius:6px; background:linear-gradient(135deg,#60a5fa55,#22d3ee55)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand"><span class="compass"></span> Odyssi</div>
+      <nav style="display:flex; gap:18px; align-items:center">
+        <a class="tiny" href="#features">Features</a>
+        <a class="tiny" href="#how">How it works</a>
+        <a class="btn" href="https://Odyssi.tech">Open App</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container hero grid fade">
+    <section>
+      <span class="pill"><span class="icon"></span> Built for the trail — and the trip</span>
+      <h1>Offline-First Map, Journal & Memory Keeper</h1>
+      <p class="lead">Capture routes, notes, photos, and thoughts anywhere — even with no signal. Odyssi keeps your data on-device by default and syncs only when you say so.</p>
+      <div class="badges">
+        <span class="pill"><span class="icon"></span> Works offline</span>
+        <span class="pill"><span class="icon"></span> Local-first privacy</span>
+        <span class="pill"><span class="icon"></span> Mobile-ready</span>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px">
+        <a class="btn" href="https://Odyssi.tech">Launch Odyssi</a>
+        <a class="btn ghost" href="#features">See Features</a>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="mapmock"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px">
+        <div class="panel" style="padding:10px">
+          <div class="tiny">Journal</div>
+          <div class="muted" style="font-size:12px; margin-top:6px">Drop notes, tag photos, auto-stamp location.</div>
+        </div>
+        <div class="panel" style="padding:10px">
+          <div class="tiny">Memory Pins</div>
+          <div class="muted" style="font-size:12px; margin-top:6px">Photo/voice to map pins for rich memories.</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <section id="features" class="container features fade" style="animation-delay:.08s">
+    <h2 style="margin:0 0 10px; font-size:22px">Focused features for explorers</h2>
+    <p class="muted" style="margin:0 0 12px; max-width:680px">Everything you need to track your path and remember the moments — without leaking your data.</p>
+    <div class="cards">
+      <div class="card"><div class="icon"></div><h3>Offline maps</h3><p class="muted">Cache tiles locally and navigate even when the signal disappears.</p></div>
+      <div class="card"><div class="icon"></div><h3>Fast journaling</h3><p class="muted">Pin a location, jot a note, attach a photo — stored on-device.</p></div>
+      <div class="card"><div class="icon"></div><h3>Privacy by design</h3><p class="muted">No trackers, no ads. Optional encrypted backups on your terms.</p></div>
+    </div>
+  </section>
+
+  <section id="how" class="container how fade" style="animation-delay:.12s">
+    <h2 style="margin:0 0 10px; font-size:22px">How it works</h2>
+    <div class="steps">
+      <div class="card"><div class="tiny">1. Capture</div><p class="muted">Pins, notes, photos — saved locally first.</p></div>
+      <div class="card"><div class="tiny">2. Explore</div><p class="muted">Navigate offline with cached tiles and GPS.</p></div>
+      <div class="card"><div class="tiny">3. Sync (optional)</div><p class="muted">When online, choose what to back up.</p></div>
+    </div>
+  </section>
+
+  <div class="cta-center fade" style="animation-delay:.16s">
+    <a class="btn" href="https://Odyssi.tech">Open Odyssi</a>
+  </div>
+
+  <footer>
+    <div class="container foot">
+      <div>© <span id="y"></span> Odyssi</div>
+      <div style="display:flex; gap:14px">
+        <a class="tiny" href="/security.txt">security.txt</a>
+        <a class="tiny" href="/terms">Terms</a>
+        <a class="tiny" href="/privacy">Privacy</a>
+      </div>
+    </div>
+  </footer>
+  <script>document.getElementById("y").textContent=new Date().getFullYear()</script>
+</body>
 </html>
