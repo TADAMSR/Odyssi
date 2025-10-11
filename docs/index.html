@@ -1,118 +1,231 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Odyssi — Offline Maps & Field Journal</title>
-<meta name="description" content="Odyssi records routes, pins, photos, and notes completely offline. Perfect for trails, wildlife surveys, ranch checks, and ag scouting—with optional encrypted sync.">
-<meta name="keywords" content="offline maps, field journal, GPS tracks, waypoints, geotagged photos, hiking, forestry, wildlife, ranch, agriculture, GPX, local-first">
-<style>
-  :root{--ink:#0a0f18;--muted:#cfe3ff;--card:#0f1730;--line:#1b2745}
-  *{box-sizing:border-box} html,body{height:100%} body{margin:0;background:#0a0f18;color:#eaf3ff;font:16px/1.55 Inter,ui-sans-serif,system-ui}
-  a{color:#eaf3ff} .wrap{max-width:1120px;margin:0 auto;padding:24px}
-  header{position:sticky;top:0;background:#0a0f18e6;border-bottom:1px solid #172447;backdrop-filter:blur(6px)}
-  .brand{display:flex;gap:14px;align-items:center}
-  .logo{width:110px;height:auto;display:block}
-  .word{font-weight:800;font-size:22px;letter-spacing:.3px}
-  .badge{display:inline-block;padding:4px 10px;border:1px solid #213259;border-radius:999px;background:#0b1329;font-size:12px;color:#bcd1ff;margin-left:8px}
-  h1{font-size:46px;line-height:1.1;margin:0 0 10px}
-  p.lead{color:#cfe3ff;margin:8px 0 18px}
-  .grid{display:grid;gap:16px;grid-template-columns:2fr 1fr}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
-  .btn{display:inline-block;padding:10px 14px;border-radius:10px;background:#0b1329;border:1px solid #213259;color:#eaf3ff;text-decoration:none;margin-right:8px}
-  canvas{display:block;width:100%;height:180px;border-radius:12px;background:#0b142a;border:1px solid #1a2748}
-  @media (max-width:900px){ .grid{grid-template-columns:1fr} h1{font-size:34px} }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Odyssi — Explore offline</title>
+  <meta name="description" content="Odyssi: offline‑first journaling with maps, media, and waypoints." />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="Referrer-Policy" content="no-referrer" />
+  <meta http-equiv="Permissions-Policy" content="geolocation=(), camera=(), microphone=()" />
+  <style>
+    :root { --bg1:#00110c; --bg2:#000; --fg:#fff; --muted:#a7b0a9; --brand:#10b981; --brand2:#34d399; }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial; color:var(--fg); background:linear-gradient(#063b2f, #000) fixed;}
+    .max{max-width:1152px;margin:0 auto;padding:0 24px}
+    header{position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);background:rgba(0,0,0,.6);border-bottom:1px solid rgba(255,255,255,.08)}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+    .badge{display:inline-flex;align-items:center;gap:8px;color:#91f7d3;font-weight:600}
+    .btn{appearance:none;border:1px solid rgba(255,255,255,.14);background:#0b1b16;color:#eafff6;padding:10px 14px;border-radius:18px;cursor:pointer}
+    .btn.secondary{background:transparent}
+    .hero{position:relative;overflow:hidden}
+    .grid2{display:grid;grid-template-columns:1fr;gap:24px;padding:56px 0}
+    @media(min-width:960px){.grid2{grid-template-columns:1.1fr .9fr}}
+    h1{font-size:clamp(32px,6vw,64px);line-height:1.05;margin:12px 0}
+    p.muted{color:#cde7de;opacity:.85}
+    .chip{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);border-radius:16px;padding:6px 10px;font-size:12px;color:#d3f7ea}
+    .card{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);border-radius:22px;overflow:hidden}
+    .card-h{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.1);font-weight:700}
+    .card-c{padding:18px 20px}
+    .features{display:grid;gap:16px;padding:40px 0}
+    @media(min-width:900px){.features{grid-template-columns:repeat(3,1fr)}}
+    .kicker{color:#8ceecf;font-weight:600}
+    .map{position:relative;height:280px;border-radius:16px;overflow:hidden;cursor:crosshair;background-image:radial-gradient(transparent 0 2px, rgba(255,255,255,.06) 2px), linear-gradient(135deg, rgba(16,185,129,.18), transparent); background-size:24px 24px, 100% 100%}
+    .pin{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--brand2);box-shadow:0 0 0 3px rgba(16,185,129,.35)}
+    .hint{display:inline-flex;gap:8px;align-items:center;color:#e2fff6;opacity:.8;font-size:12px;margin-right:12px}
+    .tour{display:grid;gap:16px}
+    @media(min-width:960px){.tour{grid-template-columns:2fr 1fr}}
+    .faq{display:grid;gap:16px}
+    .faq .item{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);border-radius:16px;padding:16px}
+    .faq .item button{all:unset;display:flex;justify-content:space-between;gap:12px;cursor:pointer}
+    footer{padding:56px 0}
+    .cta{display:flex;flex-direction:column;gap:16px;align-items:center;justify-content:space-between;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);border-radius:22px;padding:24px}
+    @media(min-width:900px){.cta{flex-direction:row}}
+    /* particle canvas height */
+    #particles{position:absolute;inset:0;height:420px;width:100%;opacity:.8}
+    .overlay{position:absolute;inset:0;background:linear-gradient(transparent, rgba(0,0,0,.6))}
+    .logoBadge{position:absolute;left:-12px;top:-12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:8px}
+    svg.logo circle{opacity:.25}
+  </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="brand">
-      <!-- Inline SVG: Odyssi triptych (day / compass / night) -->
-      <svg class="logo" viewBox="0 0 1080 480" aria-label="Odyssi emblem">
-        <defs>
-          <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#0b1220"/><stop offset="1" stop-color="#0a0f18"/>
-          </linearGradient>
-        </defs>
-        <!-- three triangles -->
-        <g stroke="#10203c" stroke-width="16" stroke-linejoin="round">
-          <path d="M0 440 L180 20 L360 440 Z" fill="#0f1a31"/>
-          <path d="M360 440 L540 20 L720 440 Z" fill="#0f1a31"/>
-          <path d="M720 440 L900 20 L1080 440 Z" fill="#0f1a31"/>
-        </g>
-        <!-- left: sun + pines -->
-        <g>
-          <circle cx="120" cy="160" r="28" fill="#eaf3ff"/>
-          <g fill="#cfe3ff">
-            <rect x="118" y="112" width="4" height="24"/><rect x="118" y="184" width="4" height="24"/>
-            <rect x="74" y="158" width="24" height="4"/><rect x="142" y="158" width="24" height="4"/>
-            <rect x="96" y="128" width="18" height="4" transform="rotate(-45 105 130)"/>
-            <rect x="136" y="196" width="18" height="4" transform="rotate(-45 145 198)"/>
-            <rect x="136" y="122" width="18" height="4" transform="rotate(45 145 124)"/>
-            <rect x="96" y="190" width="18" height="4" transform="rotate(45 105 192)"/>
-          </g>
-          <path d="M40 320 C 94 284, 142 300, 194 276 S 278 246, 316 288"
-                fill="none" stroke="#9fb8e8" stroke-width="10" stroke-linecap="round"/>
-        </g>
-        <!-- center: compass star -->
-        <g transform="translate(0,0)" stroke="#cfe3ff" stroke-linejoin="round">
-          <path d="M540 70 L560 240 L540 410 L520 240 Z" fill="#eaf3ff"/>
-          <path d="M410 240 L540 260 L670 240 L540 220 Z" fill="#eaf3ff"/>
-          <circle cx="540" cy="240" r="14" fill="#0a0f18" stroke="#eaf3ff" stroke-width="6"/>
-        </g>
-        <!-- right: moon + stars + pines -->
-        <g>
-          <path d="M940 150 a28 28 0 1 0 0 56 a22 22 0 1 1 0 -56" fill="#eaf3ff"/>
-          <g fill="#cfe3ff">
-            <circle cx="900" cy="140" r="3"/><circle cx="870" cy="168" r="3"/><circle cx="840" cy="130" r="3"/>
-            <circle cx="910" cy="200" r="3"/><circle cx="874" cy="188" r="2.5"/>
-          </g>
-        </g>
-      </svg>
-      <div class="word">Odyssi <span class="badge">Offline maps</span><span class="badge">Field journal</span></div>
+  <header>
+    <div class="max row">
+      <div class="badge">🔭 <span>Odyssi</span></div>
+      <nav>
+        <button class="btn" onclick="document.getElementById('tour').scrollIntoView({behavior:'smooth'})">Interactive tour</button>
+        <button class="btn secondary" onclick="document.getElementById('faq').scrollIntoView({behavior:'smooth'})">How it works</button>
+      </nav>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="wrap">
-  <div class="grid">
-    <section class="card">
-      <h1>Track the path.<br>Keep the story.</h1>
-      <p class="lead">Capture routes, pins, photos, and notes—completely offline. Odyssi keeps your data on-device by default and lets you sync when you say so.</p>
-      <a class="btn" href="#open">Open App</a>
-      <a class="btn" href="#features">See Features</a>
-    </section>
-    <aside class="card">
-      <span style="display:inline-block;padding:4px 10px;border:1px solid #213259;border-radius:999px;background:#0b1329;font-size:12px;color:#bcd1ff;margin-bottom:8px">Route preview</span>
-      <canvas id="map"></canvas>
-    </aside>
-  </div>
-
-  <section id="features" class="grid" style="margin-top:16px">
-    <div class="card"><span class="badge">Offline</span><h3>Works with no signal</h3><p>Cache tiles and record tracks in the backcountry, on ranch checks, and during wildlife surveys.</p></div>
-    <div class="card"><span class="badge">Local-first</span><h3>Own your data</h3><p>Everything is stored on-device by default. Optional encrypted backups on your terms.</p></div>
-    <div class="card"><span class="badge">Fast journaling</span><h3>Pins, photos, & notes</h3><p>Drop pins, tag photos, dictate notes, and auto-stamp location and time.</p></div>
+  <section class="hero">
+    <canvas id="particles"></canvas>
+    <div class="overlay" aria-hidden="true"></div>
+    <div class="max grid2" style="position:relative;z-index:1;padding-top:64px;padding-bottom:72px">
+      <div>
+        <div class="chip">✨ Offline‑first journaling • Maps • Media</div>
+        <h1>Explore, capture, and relive your journeys — even <span style="color:var(--brand)">offline</span>.</h1>
+        <p class="muted">Pin locations, record rich notes, and sync securely when you choose.</p>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" onclick="document.getElementById('tour').scrollIntoView({behavior:'smooth'})">Try interactive tour →</button>
+          <button class="btn secondary" onclick="document.getElementById('video').scrollIntoView({behavior:'smooth'})">Watch 40s tour</button>
+        </div>
+        <div style="margin-top:8px;color:#cde7de;opacity:.7;font-size:12px">No tracking • Works without signal • Your data, your rules</div>
+      </div>
+      <div style="position:relative">
+        <div class="logoBadge" aria-hidden="true">
+          <!-- TODO: Replace with approved Odyssi logo SVG -->
+          <svg class="logo" width="48" height="48" viewBox="0 0 64 64" fill="none">
+            <defs>
+              <linearGradient id="g" x1="0" x2="1">
+                <stop offset="0%" stop-color="#10b981"/>
+                <stop offset="100%" stop-color="#34d399"/>
+              </linearGradient>
+            </defs>
+            <circle cx="32" cy="32" r="30" fill="url(#g)" />
+            <path d="M18 40l14-20 14 20" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="40" r="3" fill="#a7f3d0"/>
+          </svg>
+        </div>
+        <div class="card">
+          <div class="card-h">Odyssi Mini‑Map</div>
+          <div class="card-c">
+            <div id="map" class="map" aria-label="Demo grid map. Click to add a pin; drag to move."></div>
+            <div style="margin-top:10px">
+              <span class="hint">🗺️ Tap to add • Drag to move</span>
+              <span class="hint">ℹ️ Pins are demo-only (memory)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <footer class="wrap" style="border-top:1px solid #172447;margin-top:36px;color:#a9c0e4"><p>© Odyssi. Your expedition’s memory engine.</p></footer>
-</main>
+  <section class="max">
+    <div class="features">
+      <div class="card"><div class="card-h kicker">Offline‑first</div><div class="card-c">Capture notes, locations, and media without a signal. Sync only when you want.</div></div>
+      <div class="card"><div class="card-h kicker">Smart Waypoints</div><div class="card-c">Organize trips with tags, photos, and timelines that actually make sense.</div></div>
+      <div class="card"><div class="card-h kicker">Device Friendly</div><div class="card-c">Lightweight and fast on older phones and laptops with no creepy trackers.</div></div>
+    </div>
+  </section>
+
+  <section id="video" class="max" aria-labelledby="tourTitle">
+    <div class="card">
+      <div class="card-h">Quick Tour</div>
+      <div class="card-c">
+        <div class="tour" id="tour">
+          <div class="card" style="border-radius:16px">
+            <div class="card-c" id="tourPanel">
+              <h3 id="tourTitle" style="margin:0 0 6px 0">Drop your first waypoint</h3>
+              <p id="tourText" class="muted" style="margin:0">Click anywhere on the grid map above to add a pin. Drag it to re‑position.</p>
+              <div style="display:flex;gap:10px;margin-top:14px">
+                <button class="btn" id="prevBtn">Previous</button>
+                <button class="btn secondary" id="nextBtn">Next</button>
+              </div>
+            </div>
+          </div>
+          <aside class="card" style="border-radius:16px">
+            <div class="card-c"><strong>Hint</strong>
+              <div id="tourHint" style="margin-top:6px;font-size:14px;color:#eafff6">Tap the map</div>
+              <div style="margin-top:10px;color:#b8ccc5;font-size:12px">* In the full app, this tour ties into real data with encryption and export.</div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="max" style="padding:20px 0 48px">
+    <div class="faq">
+      <div class="item"><button aria-expanded="true"><span>How does Odyssi work offline?</span><span>▾</span></button><p class="muted" style="margin-top:8px">We cache the UI and store your notes/waypoints locally. When you choose to sync, only encrypted blobs move.</p></div>
+      <div class="item"><button aria-expanded="false"><span>What data do you collect?</span><span>▸</span></button><p class="muted" hidden>By default: none. No cookies, no pixels, no analytics. You opt in to anything else.</p></div>
+      <div class="item"><button aria-expanded="false"><span>Can I export my data?</span><span>▸</span></button><p class="muted" hidden>Yes. You’ll be able to export to JSON/GPX/ZIP and move it wherever you like.</p></div>
+    </div>
+  </section>
+
+  <footer class="max">
+    <div class="cta">
+      <div>
+        <h3 style="margin:0 0 6px 0">Ready to chart your path?</h3>
+        <p class="muted" style="margin:0">Install the PWA later, use it offline now. Your data stays yours.</p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn">Get Started</button>
+        <button class="btn secondary">Docs</button>
+      </div>
+    </div>
+    <div style="margin-top:16px;color:#9fb7af;font-size:12px">© <span id="y"></span> Odyssi — privacy‑first, offline‑ready.</div>
+  </footer>
 
 <script>
-  // animated route preview (safe; no innerHTML)
-  const m = document.getElementById('map'); const x=m.getContext('2d');
-  function drawRoute(){
-    const w=m.width= m.clientWidth, h=m.height=180;
-    x.clearRect(0,0,w,h); x.fillStyle='#0b142a'; x.fillRect(0,0,w,h);
-    x.strokeStyle='#14254a'; x.lineWidth=1;
-    for(let i=0;i<w;i+=24){ x.beginPath(); x.moveTo(i,0); x.lineTo(i,h); x.stroke(); }
-    for(let j=0;j<h;j+=24){ x.beginPath(); x.moveTo(0,j); x.lineTo(w,j); x.stroke(); }
-    x.strokeStyle='#cfe3ff'; x.lineWidth=3; x.beginPath();
-    const pts=[[20,140],[w*0.25,110],[w*0.45,130],[w*0.62,90],[w*0.8,110],[w-20,80]];
-    pts.forEach(([px,py],i)=> i?x.lineTo(px,py):x.moveTo(px,py)); x.stroke();
-    const t=(Date.now()/600)%1; const p=pts[3]; x.fillStyle='#eaf3ff'; x.beginPath(); x.arc(p[0],p[1],5+4*Math.sin(t*6),0,Math.PI*2); x.fill();
-  }
-  (function loop(){ drawRoute(); requestAnimationFrame(loop); })();
+  // Year
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  // Particle background
+  (function(){
+    const cnv = document.getElementById('particles');
+    const ctx = cnv.getContext('2d');
+    const DPR = Math.min(window.devicePixelRatio||1, 2);
+    const parts = [];
+    function resize(){ cnv.width = Math.floor(window.innerWidth*DPR); cnv.height = Math.floor(420*DPR); }
+    function init(){
+      parts.length = 0; const n = 80;
+      for(let i=0;i<n;i++) parts.push({x:Math.random()*cnv.width,y:Math.random()*cnv.height,vx:(Math.random()-.5)*.3*DPR,vy:(Math.random()-.5)*.3*DPR,r:Math.random()*2*DPR+.5});
+    }
+    function loop(){
+      ctx.clearRect(0,0,cnv.width,cnv.height);
+      for(const p of parts){
+        p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>cnv.width) p.vx*=-1; if(p.y<0||p.y>cnv.height) p.vy*=-1;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle = 'rgba(16,185,129,0.25)'; ctx.fill();
+      }
+      requestAnimationFrame(loop);
+    }
+    resize(); init(); loop(); window.addEventListener('resize',()=>{resize(); init();});
+  })();
+
+  // Draggable map pins
+  (function(){
+    const map = document.getElementById('map');
+    let dragging = null; let offX=0, offY=0;
+    function addPin(x,y,label){
+      const pin = document.createElement('div'); pin.className='pin'; pin.style.left=(x-7)+'px'; pin.style.top=(y-7)+'px'; pin.title = label || 'Waypoint';
+      pin.addEventListener('mousedown', e=>{dragging=pin; offX=e.offsetX; offY=e.offsetY;});
+      map.appendChild(pin);
+    }
+    map.addEventListener('click', e=>{
+      if(dragging) return; const r = map.getBoundingClientRect(); addPin(e.clientX-r.left, e.clientY-r.top, 'Pin');
+    });
+    window.addEventListener('mousemove', e=>{
+      if(!dragging) return; const r = map.getBoundingClientRect(); dragging.style.left=(e.clientX-r.left-offX)+'px'; dragging.style.top=(e.clientY-r.top-offY)+'px';
+    });
+    window.addEventListener('mouseup', ()=> dragging=null);
+    // seed two pins
+    setTimeout(()=>{ addPin(60,60,'First Pin'); addPin(220,120,'Photo Spot'); }, 100);
+  })();
+
+  // Tour carousel
+  (function(){
+    const steps=[
+      {t:'Drop your first waypoint', x:'Click anywhere on the grid map above to add a pin. Drag it to re‑position.', h:'Tap the map'},
+      {t:'Label it', x:'Hover a pin to see its label. In the app you can rename, tag, and add media.', h:'Hover any pin'},
+      {t:'Offline by default', x:'Everything you do here works without a network. Sync only when you say so.', h:'Airplane mode works'},
+    ];
+    let i=0; const tt=document.getElementById('tourTitle'), tx=document.getElementById('tourText'), hh=document.getElementById('tourHint');
+    function render(){ tt.textContent=steps[i].t; tx.textContent=steps[i].x; hh.textContent=steps[i].h; }
+    document.getElementById('prevBtn').addEventListener('click',()=>{ i=(i-1+steps.length)%steps.length; render(); });
+    document.getElementById('nextBtn').addEventListener('click',()=>{ i=(i+1)%steps.length; render(); });
+    render();
+  })();
+
+  // FAQ accordion
+  (function(){
+    document.querySelectorAll('.faq .item').forEach(item=>{
+      const btn=item.querySelector('button'); const p=item.querySelector('p');
+      btn.addEventListener('click',()=>{ const open=btn.getAttribute('aria-expanded')==='true'; btn.setAttribute('aria-expanded', String(!open)); btn.querySelector('span:last-child').textContent = open?'▸':'▾'; if(open){p.hidden=true;} else {p.hidden=false;} });
+    });
+  })();
 </script>
 </body>
 </html>
